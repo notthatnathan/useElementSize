@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useLayoutEffect, useState } from 'react'
 
 /**
  * Returns current width and height of specified element.
@@ -12,7 +12,7 @@ const useElementSize = ref => {
   const [size, setSize] = useState([0, 0])
 
     // set initial size
-    useEffect(() => {
+    useLayoutEffect(() => {
       if (!ref?.current) return
 
       setSize([
@@ -36,7 +36,7 @@ const useElementSize = ref => {
     })
   })
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (!ref?.current) return
 
     elObserver.observe(ref?.current)

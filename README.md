@@ -18,3 +18,6 @@ const ParentComponent = () => {
 ```
 
 [Read the blog post](https://blog.nathanfitzsimmons.com/2021/05/05/window-pains-using-element-queries-in-your-react-app/)
+
+#### TODO
+- Use a single `ResizeObserver` ([Read more](https://groups.google.com/a/chromium.org/g/blink-dev/c/z6ienONUb5A/m/F5-VcUZtBAAJ))
