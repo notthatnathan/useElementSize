@@ -1,36 +1,41 @@
 import { useCallback, useEffect, useState } from 'react'
 
 /**
- * Returns current width of specified element.
+ * Returns current width and height of specified element.
  *
- * @param {Ref} ref element to use in width calculation
+ * @param {Ref} ref element to use in size calculation
  */
-const useElementWidth = ref => {
+const useElementSize = ref => {
   // handle ssr
   if (typeof window === 'undefined') return 0;
 
-  const getWidth = useCallback(() => {
-    return ref?.current?.getBoundingClientRect().width * (window.visualViewport?.scale || 1) || 0
-  }, [ref?.current])
-  const [width, setWidth] = useState(0)
+  const [size, setSize] = useState([0, 0])
 
+    // set initial size
+    useEffect(() => {
+      if (!ref?.current) return
+
+      setSize([
+        ref?.current?.getBoundingClientRect().width * (window.visualViewport?.scale || 1) || 0,
+        ref?.current?.getBoundingClientRect().height * (window.visualViewport?.scale || 1) || 0,
+      ])
+    }, [ref?.current])
+
+  // watch for size changes
   const elObserver = new ResizeObserver(entries => {
     window.requestAnimationFrame(() => {
       if (!ref?.current) return
 
       if (entries?.[0]?.contentBoxSize?.[0]) {
-        setWidth(entries[0].contentBoxSize[0].inlineSize)
+        setSize([entries[0].contentBoxSize[0].inlineSize, entries[0].contentBoxSize[1].inlineSize])
       } else if (entries?.contentBoxSize) {
-        setWidth(entries[0].contentBoxSize.inlineSize)
+        // TODO ???
+        setSize(entries[0].contentBoxSize.inlineSize)
       } else {
-        setWidth(entries[0].contentRect.width)
+        setSize([entries[0].contentRect.width, entries[0].contentRect.height])
       }
     })
   })
-
-  useEffect(() => {
-    setWidth(getWidth())
-  }, [ref?.current])
 
   useEffect(() => {
     if (!ref?.current) return
@@ -40,11 +45,12 @@ const useElementWidth = ref => {
     // eslint-disable-next-line consistent-return
     return () => {
       if (!ref?.current) return
+
       elObserver.unobserve(ref?.current)
     }
   })
 
-  return width
+  return size
 }
 
-export default useElementWidth
+export default useElementSize
