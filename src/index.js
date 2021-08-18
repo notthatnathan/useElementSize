@@ -27,10 +27,9 @@ const useElementSize = ref => {
       if (!ref?.current) return
 
       if (entries?.[0]?.contentBoxSize?.[0]) {
-        setSize([entries[0].contentBoxSize[0].inlineSize, entries[0].contentBoxSize[1].inlineSize])
+        setSize([entries[0].contentBoxSize[0].inlineSize, entries[0].contentBoxSize[0].blockSize])
       } else if (entries?.contentBoxSize) {
-        // TODO ???
-        setSize(entries[0].contentBoxSize.inlineSize)
+        setSize([entries[0].contentBoxSize.inlineSize, entries[0].contentBoxSize[0].blockSize])
       } else {
         setSize([entries[0].contentRect.width, entries[0].contentRect.height])
       }
