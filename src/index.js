@@ -6,26 +6,13 @@ import { useLayoutEffect, useState } from 'react'
  * @param {Ref} ref element to use in size calculation
  */
 const useElementSize = ref => {
-  // handle ssr
-  if (typeof window === 'undefined') return 0;
+  // only runs in the browser
+  if (typeof window === 'undefined') return [0, 0];
 
   const [size, setSize] = useState([0, 0])
 
-    // set initial size
-    useLayoutEffect(() => {
-      if (!ref?.current) return
-
-      setSize([
-        ref?.current?.getBoundingClientRect().width * (window.visualViewport?.scale || 1) || 0,
-        ref?.current?.getBoundingClientRect().height * (window.visualViewport?.scale || 1) || 0,
-      ])
-    }, [ref?.current])
-
-  // watch for size changes
   const elObserver = new ResizeObserver(entries => {
     window.requestAnimationFrame(() => {
-      if (!ref?.current) return
-
       if (entries?.[0]?.contentBoxSize?.[0]) {
         setSize([entries[0].contentBoxSize[0].inlineSize, entries[0].contentBoxSize[0].blockSize])
       } else if (entries?.contentBoxSize) {
@@ -39,6 +26,13 @@ const useElementSize = ref => {
   useLayoutEffect(() => {
     if (!ref?.current) return
 
+    // set initial size
+    setSize([
+      ref?.current?.getBoundingClientRect().width * (window.visualViewport?.scale || 1) || 0,
+      ref?.current?.getBoundingClientRect().height * (window.visualViewport?.scale || 1) || 0,
+    ])
+
+    // watch for size changes
     elObserver.observe(ref?.current)
 
     // eslint-disable-next-line consistent-return
@@ -47,7 +41,7 @@ const useElementSize = ref => {
 
       elObserver.unobserve(ref?.current)
     }
-  })
+  }, [ref?.current])
 
   return size
 }
