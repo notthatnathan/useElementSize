@@ -13,13 +13,13 @@ const useElementSize = ref => {
 
   const elObserver = new ResizeObserver(entries => {
     window.requestAnimationFrame(() => {
-      if (entries?.[0]?.contentBoxSize?.[0]) {
-        setSize([entries[0].contentBoxSize[0].inlineSize, entries[0].contentBoxSize[0].blockSize])
-      } else if (entries?.contentBoxSize) {
-        setSize([entries[0].contentBoxSize.inlineSize, entries[0].contentBoxSize[0].blockSize])
-      } else {
+      // if (entries?.[0]?.contentBoxSize?.[0]) {
+        // setSize([entries[0].contentBoxSize[0].inlineSize, entries[0].contentBoxSize[0].blockSize])
+      // } else if (entries?.contentBoxSize) {
+        // setSize([entries[0].contentBoxSize.inlineSize, entries[0].contentBoxSize[0].blockSize])
+      // } else {
         setSize([entries[0].contentRect.width, entries[0].contentRect.height])
-      }
+      // }
     })
   })
 
