@@ -1,0 +1,29 @@
+{
+  "name": "use-element-size",
+  "version": "1.0.0",
+  "description": "A React hook for watching an element’s width and height.",
+  "main": "dist/index.js",
+  "exports": {
+    "require": "./dist/index.js",
+    "default": "./dist/index.modern.js"
+  },
+  "scripts": {
+    "build": "microbundle"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/notthatnathan/useElementSize.git"
+  },
+  "author": "Nathan Fitzsimmons",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/notthatnathan/useElementSize/issues"
+  },
+  "homepage": "https://github.com/notthatnathan/useElementSize#readme",
+  "peerDependencies": {
+    "react": "^16.6.0 || ^17"
+  },
+  "devDependencies": {
+    "microbundle": "^0.13.0"
+  }
+}
