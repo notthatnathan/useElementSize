@@ -7,7 +7,7 @@ Example:
 ```js
 const ParentComponent = () => {
   const parentRef = useRef(null)
-  const [width, height] = useElementSize(ref)
+  const [width, height] = useElementSize(parentRef)
 
   return (
     <div ref={parentRef}>

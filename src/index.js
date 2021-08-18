@@ -43,6 +43,8 @@ const useElementSize = ref => {
     }
   }, [ref?.current])
 
+  console.log('width', size[0])
+
   return size
 }
 
