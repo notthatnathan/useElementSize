@@ -21,3 +21,4 @@ const ParentComponent = () => {
 
 #### TODO
 - Use a single `ResizeObserver` ([Read more](https://groups.google.com/a/chromium.org/g/blink-dev/c/z6ienONUb5A/m/F5-VcUZtBAAJ))
+- Limit updates with `requestAnimationFrame`
