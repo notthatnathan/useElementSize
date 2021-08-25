@@ -1,4 +1,9 @@
-import { useLayoutEffect, useState } from 'react'
+import { useLayoutEffect, useState, useRef } from 'react'
+
+const defaultSize = [0, 0]
+
+let resizeObserver
+const callbacks = {}
 
 /**
  * Returns current width and height of specified element.
@@ -6,38 +11,54 @@ import { useLayoutEffect, useState } from 'react'
  * @param {Ref} ref element to use in size calculation
  */
 const useElementSize = ref => {
-  // only runs in the browser
-  if (typeof window === 'undefined') return [0, 0];
+  const [size, setSize] = useState(defaultSize)
+  // generate id based on current number of callbacks
+  const elId = useRef(`resize-${Object.keys(callbacks).length + 1}`)
 
-  const [size, setSize] = useState([0, 0])
+  const updateSizes = entries => {
+    window.requestAnimationFrame(() => {
+      entries.forEach(entry => {
+        const target = entry.target.current || entry.target
+        callbacks[target.getAttribute('resize-id')](entry)
+      })
+    })
+  }
 
-  const elObserver = new ResizeObserver(entries => {
-      if (entries?.[0]?.contentBoxSize?.[0]) {
-        setSize([entries[0].contentBoxSize[0].inlineSize, entries[0].contentBoxSize[0].blockSize])
-      } else if (entries?.contentBoxSize) {
-        setSize([entries[0].contentBoxSize.inlineSize, entries[0].contentBoxSize[0].blockSize])
-      } else {
-        setSize([entries[0].contentRect.width, entries[0].contentRect.height])
-      }
-  })
+  // all instances use the same observer
+  resizeObserver = resizeObserver || new ResizeObserver(updateSizes)
 
   useLayoutEffect(() => {
     if (!ref?.current) return
 
+    ref.current.setAttribute('resize-id', elId.current)
+
     // set initial size
     setSize([
-      ref?.current?.getBoundingClientRect().width * (window.visualViewport?.scale || 1) || 0,
-      ref?.current?.getBoundingClientRect().height * (window.visualViewport?.scale || 1) || 0,
+      ref?.current?.getBoundingClientRect().width,
+      ref?.current?.getBoundingClientRect().height,
     ])
 
+    // add callback for this instance
+    callbacks[elId.current] = entry => {
+      if (!entry) return
+
+      if (entry.contentBoxSize?.[0]) {
+        setSize([entry.contentBoxSize[0].inlineSize, entry.contentBoxSize[0].blockSize])
+      } else if (entries?.contentBoxSize) {
+        setSize([entry.contentBoxSize.inlineSize, entry.contentBoxSize[0].blockSize])
+      } else {
+        setSize([entry.contentRect.width, entry.contentRect.height])
+      }
+    }
+
     // watch for size changes
-    elObserver.observe(ref?.current)
+    resizeObserver.observe(ref?.current)
 
     // eslint-disable-next-line consistent-return
     return () => {
       if (!ref?.current) return
 
-      elObserver.unobserve(ref?.current)
+      resizeObserver.unobserve(ref?.current)
     }
   }, [ref?.current])
 
