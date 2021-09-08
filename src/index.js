@@ -17,7 +17,7 @@ const useElementSize = ref => {
 
   const updateSizes = entries => {
     window.requestAnimationFrame(() => {
-      entries.forEach(entry => {
+      entries?.forEach(entry => {
         const target = entry.target.current || entry.target
         callbacks[target.getAttribute('resize-id')](entry)
       })
@@ -44,7 +44,7 @@ const useElementSize = ref => {
 
       if (entry.contentBoxSize?.[0]) {
         setSize([entry.contentBoxSize[0].inlineSize, entry.contentBoxSize[0].blockSize])
-      } else if (entries?.contentBoxSize) {
+      } else if (entry?.contentBoxSize) {
         setSize([entry.contentBoxSize.inlineSize, entry.contentBoxSize[0].blockSize])
       } else {
         setSize([entry.contentRect.width, entry.contentRect.height])
