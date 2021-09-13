@@ -1,4 +1,5 @@
 import { useLayoutEffect, useState, useRef } from 'react'
+import { v4 as uuidv4 } from 'uuid'
 
 const defaultSize = [0, 0]
 
@@ -12,15 +13,13 @@ const callbacks = {}
  */
 const useElementSize = ref => {
   const [size, setSize] = useState(defaultSize)
-  // generate id based on current number of callbacks
-  const elId = useRef(`resize-${Object.keys(callbacks).length + 1}`)
+  // set unique id or reuse element's existing unique id
+  const elId = useRef(ref?.current?.getAttribute('resize-id') || `resize-${uuidv4()}`)
 
   const updateSizes = entries => {
-    window.requestAnimationFrame(() => {
-      entries?.forEach(entry => {
-        const target = entry.target.current || entry.target
-        callbacks[target.getAttribute('resize-id')](entry)
-      })
+    entries?.forEach(entry => {
+      const target = entry.target.current || entry.target
+      callbacks[target.getAttribute('resize-id')].forEach(c => c(entry))
     })
   }
 
@@ -39,7 +38,11 @@ const useElementSize = ref => {
     ])
 
     // add callback for this instance
-    callbacks[elId.current] = entry => {
+    // more than one callback can be added for an element
+    // in case of two instances watching the same ref
+    callbacks[elId.current] = [
+      ...callbacks[elId.current] || [],
+      entry => {
       if (!entry) return
 
       if (entry.contentBoxSize?.[0]) {
@@ -49,7 +52,7 @@ const useElementSize = ref => {
       } else {
         setSize([entry.contentRect.width, entry.contentRect.height])
       }
-    }
+    }]
 
     // watch for size changes
     resizeObserver.observe(ref?.current)
