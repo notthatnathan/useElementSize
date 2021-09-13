@@ -14,7 +14,8 @@ const callbacks = {}
 const useElementSize = ref => {
   const [size, setSize] = useState(defaultSize)
   // set unique id or reuse element's existing unique id
-  const elId = useRef(ref?.current?.getAttribute('resize-id') || `resize-${uuidv4()}`)
+  const existingId = ref?.current?.getAttribute('resize-id')
+  const elId = useRef(existingId || `resize-${uuidv4()}`)
 
   const updateSizes = entries => {
     entries?.forEach(entry => {
@@ -54,6 +55,11 @@ const useElementSize = ref => {
       }
     }]
 
+    // remove existing watch
+    if (existingId) {
+      resizeObserver.unobserve(ref?.current)
+    }
+
     // watch for size changes
     resizeObserver.observe(ref?.current)
 
@@ -63,7 +69,7 @@ const useElementSize = ref => {
 
       resizeObserver.unobserve(ref?.current)
     }
-  }, [ref?.current])
+  }, [ref?.current, existingId])
 
   return size
 }
