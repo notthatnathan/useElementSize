@@ -12,6 +12,9 @@ const callbacks = {}
  * @param {Ref} ref element to use in size calculation
  */
 const useElementSize = ref => {
+  // returns 0 sizes for ssr
+  if (typeof window === 'undefined') return [0, 0]
+
   const [size, setSize] = useState(defaultSize)
   // set unique id or reuse element's existing unique id
   const existingId = ref?.current?.getAttribute('resize-id')
