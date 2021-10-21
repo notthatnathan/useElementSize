@@ -18,7 +18,8 @@ const useElementSize = ref => {
   const [size, setSize] = useState(defaultSize)
   // set unique id or reuse element's existing unique id
   const existingId = ref?.current?.getAttribute('resize-id')
-  const elId = useRef(existingId || `resize-${uuidv4()}`)
+  const testMode = process?.env?.NODE_ENV === 'test'
+  const elId = useRef(existingId || `resize-${testMode ? 'test' : uuidv4()}`)
 
   const updateSizes = entries => {
     entries?.forEach(entry => {
