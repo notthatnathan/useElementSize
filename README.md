@@ -1,6 +1,6 @@
 # useElementSize
 
-Pass an element `ref` that you’d like to observe. Its initial and changing `width` and `height` are returned.
+React hook to track the size of an element. Pass an element `ref` that you’d like to observe. Its initial and changing `width` and `height` are returned.
 
 
 ## Example
