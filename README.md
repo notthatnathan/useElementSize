@@ -2,12 +2,13 @@
 
 Pass an element `ref` that you’d like to observe. Its initial and changing `width` and `height` are returned.
 
-Example:
+
+## Example
 
 ```js
 const ParentComponent = () => {
   const parentRef = useRef(null)
-  const [width, height] = useElementSize(parentRef)
+  const [width, height] = useElementSize(parentRef, [300, 100])
 
   return (
     <div ref={parentRef}>
@@ -17,8 +18,11 @@ const ParentComponent = () => {
 }
 ```
 
-[Read the blog post](https://blog.nathanfitzsimmons.com/2021/05/05/window-pains-using-element-queries-in-your-react-app/)
+## Arguments
 
-#### TODO
-✅ Use a single `ResizeObserver` ([Read more](https://groups.google.com/a/chromium.org/g/blink-dev/c/z6ienONUb5A/m/F5-VcUZtBAAJ))
-✅ Limit updates with `requestAnimationFrame`
+- `ref`: The element ref to watch for size changes.
+- `defaultSize` (optional): Provide a default size to return if a measurement isn’t yet available. Helpful for server-side rendering.
+
+---
+
+[Read the blog post](https://blog.nathanfitzsimmons.com/2021/05/05/window-pains-using-element-queries-in-your-react-app/)
