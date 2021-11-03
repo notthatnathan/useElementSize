@@ -1,6 +1,6 @@
 {
   "name": "@notthatnathan/use-element-size",
-  "version": "1.1.6",
+  "version": "1.1.7",
   "description": "A React hook for watching an element’s width and height.",
   "main": "dist/index.js",
   "exports": {
