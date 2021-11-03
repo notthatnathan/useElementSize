@@ -1,8 +1,6 @@
 import { useLayoutEffect, useState, useRef } from 'react'
 import { v4 as uuidv4 } from 'uuid'
 
-const defaultSize = [0, 0]
-
 let resizeObserver
 const callbacks = {}
 
@@ -10,10 +8,11 @@ const callbacks = {}
  * Returns current width and height of specified element.
  *
  * @param {Ref} ref element to use in size calculation
+ * @param {Array} defaultSize dims to use server side and before the first measurement
  */
-const useElementSize = ref => {
-  // returns 0 sizes for ssr
-  if (typeof window === 'undefined') return [0, 0]
+const useElementSize = (ref, defaultSize = [0, 0]) => {
+  // returns default dims for ssr
+  if (typeof window === 'undefined') return defaultSize
 
   const [size, setSize] = useState(defaultSize)
   // set unique id or reuse element's existing unique id
