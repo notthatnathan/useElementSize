@@ -25,4 +25,4 @@ const ParentComponent = () => {
 
 ---
 
-[Read the blog post](https://blog.nathanfitzsimmons.com/2021/05/05/window-pains-using-element-queries-in-your-react-app/)
+[Read the blog post](https://unsure.me/window-pains-using-element-queries-in-your-react-app/)
